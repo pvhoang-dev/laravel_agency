@@ -6,3 +6,4 @@ return DB::getSchemaBuilder()->getColumnListing($table);
 
 
 test
+test
