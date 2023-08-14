@@ -40,7 +40,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title">{{$title ?? ''}}</h4>
+                            <h2 class="page-title font-22">{{$title ?? ''}}</h2>
                         </div>
                     </div>
                 </div>
