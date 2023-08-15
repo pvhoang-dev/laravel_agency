@@ -4,8 +4,72 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d7ab4b5bc75a5d76f3e4982c9e36bee",
+    "content-hash": "22cd52f73075c12db27fdecd97b10f28",
     "packages": [
+        {
+            "name": "barryvdh/laravel-translation-manager",
+            "version": "v0.6.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-translation-manager.git",
+                "reference": "cfa0484084b5372f52d208bfa6f13aaaa11afaa5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-translation-manager/zipball/cfa0484084b5372f52d208bfa6f13aaaa11afaa5",
+                "reference": "cfa0484084b5372f52d208bfa6f13aaaa11afaa5",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^9|^10",
+                "illuminate/translation": "^9|^10",
+                "php": ">=7.2",
+                "symfony/finder": "^6"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7|^8"
+            },
+            "suggest": {
+                "tanmuhittin/laravel-google-translate": "If you want to translate using Google API"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.6-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Barryvdh\\TranslationManager\\ManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\TranslationManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Manage Laravel Translations",
+            "keywords": [
+                "laravel",
+                "translations",
+                "translator"
+            ],
+            "support": {
+                "issues": "https://github.com/barryvdh/laravel-translation-manager/issues",
+                "source": "https://github.com/barryvdh/laravel-translation-manager/tree/v0.6.5"
+            },
+            "time": "2023-06-05T10:20:47+00:00"
+        },
         {
             "name": "bensampo/laravel-enum",
             "version": "v6.6.2",

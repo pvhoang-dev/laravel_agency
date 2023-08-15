@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Models\Company;
 use App\Http\Controllers\AuthController;
-use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +23,6 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registering'])->name('registering');
 
 
-
 Route::get('/auth/redirect/{provider}', function ($provider) {
 
     return Socialite::driver($provider)->redirect();
@@ -32,6 +30,21 @@ Route::get('/auth/redirect/{provider}', function ($provider) {
 
 Route::get('/auth/callback/{provider}', [AuthController::class, 'callback'])->name('auth.callback');
 
+Route::get('/', function () {
+    return view('layout.master');
+})->name('welcome');
+
+Route::get('/language/{locale}', function ($locale) {
+    if (!in_array($locale, config('app.locales'))) {
+        $locale = config('app.fallback_locale');
+    }
+
+    session()->put('locale', $locale);
+
+    return redirect()->back();
+})->name('language');
+
 ///////////////
 Route::get('/test', [TestController::class, 'test']);
+Route::get('/testapi', [TestController::class, 'testAPI']);
 

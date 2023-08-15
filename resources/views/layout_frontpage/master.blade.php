@@ -12,7 +12,7 @@
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
     <!-- CSS Files -->
@@ -21,81 +21,82 @@
 </head>
 
 <body class="ecommerce-page">
-    @include('layout_frontpage.navbar')
-    @include('layout_frontpage.header')
+@include('layout_frontpage.navbar')
+@include('layout_frontpage.header')
 
-    <div class="main main-raised">
-        <!-- section -->
-        <div class="section">
+<div class="main main-raised">
+    <!-- section -->
+    <div class="section">
+        <div class="container">
             <div class="container">
-                <div class="container">
-                    <h2 class="section-title">Find what you need</h2>
-                    <div class="row">
-                        @include('layout_frontpage.sidebar')
+                <h2 class="section-title">
+                    {{ __('frontpage.title') }}
+                </h2>
+                <div class="row">
+                    @include('layout_frontpage.sidebar')
 
-                        <div class="col-md-9">
-                            <div class="row">
-                                @yield('content')
-                            </div>
-                            <div class="col-md-3" style="float: right">
-                                <button rel="tooltip" class="btn btn-rose btn-round" data-original-title=""
-                                    title="">Load
-                                    more...
-                                </button>
-                            </div>
-                        </div>
+                    <div class="col-md-9">
+                        @yield('content')
+
                     </div>
                 </div>
             </div>
-        </div><!-- section -->
+        </div>
+    </div><!-- section -->
 
-    </div> <!-- end-main-raised -->
+</div> <!-- end-main-raised -->
 
-    <!-- section -->
-    @include('layout_frontpage.footer')
+<!-- section -->
+@include('layout_frontpage.footer')
 
-    <!--   Core JS Files   -->
-    <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/material.min.js') }}" type="text/javascript"></script>
+<!--   Core JS Files   -->
+<script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/material.min.js') }}" type="text/javascript"></script>
 
-    <!--	Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/   -->
-    <script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/material-kit.js') }}" type="text/javascript"></script>
+<!--	Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/   -->
+<script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/material-kit.js') }}" type="text/javascript"></script>
+{{--<script src="{{ asset('js/moment.min.js') }}" type="text/javascript"></script>--}}
+{{--<script src="{{ asset('js/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>--}}
+{{--<script src="{{ asset('js/bootstrap-selectpicker.js') }}" type="text/javascript"></script>--}}
+{{--<script src="{{ asset('js/bootstrap-tagsinput.js') }}" type="text/javascript"></script>--}}
+{{--<script src="{{ asset('js/jasny-bootstrap.min.js') }}" type="text/javascript"></script>--}}
+{{--<script src="{{ asset('js/material-kit.js?v=1.2.1') }}" type="text/javascript"></script>--}}
 
-    <!--	Plugin for Tags, full documentation here: http://xoxco.com/projects/code/tagsinput/   -->
+<!--	Plugin for Tags, full documentation here: http://xoxco.com/projects/code/tagsinput/   -->
 
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+<script type="text/javascript">
+    $(document).ready(function () {
 
-            var slider2 = document.getElementById('sliderRefine');
+        var slider2 = document.getElementById('sliderRefine');
 
-            noUiSlider.create(slider2, {
-                start: [42, 880],
-                connect: true,
-                range: {
-                    'min': [30],
-                    'max': [900]
-                }
-            });
-
-            var limitFieldMin = document.getElementById('price-left');
-            var limitFieldMax = document.getElementById('price-right');
-
-            slider2.noUiSlider.on('update', function(values, handle) {
-                if (handle) {
-                    limitFieldMax.innerHTML = $('#price-right').data('currency') + Math.round(values[
-                        handle]);
-                } else {
-                    limitFieldMin.innerHTML = $('#price-left').data('currency') + Math.round(values[
-                        handle]);
-                }
-            });
+        noUiSlider.create(slider2, {
+            start: [42, 880],
+            connect: true,
+            range: {
+                'min': [30],
+                'max': [900]
+            }
         });
-    </script>
 
-    @stack('js')
+        var limitFieldMin = document.getElementById('price-left');
+        var limitFieldMax = document.getElementById('price-right');
+
+        slider2.noUiSlider.on('update', function (values, handle) {
+            if (handle) {
+                limitFieldMax.innerHTML = $('#price-right').data('currency') + Math.round(values[
+                    handle]);
+            } else {
+                limitFieldMin.innerHTML = $('#price-left').data('currency') + Math.round(values[
+                    handle]);
+            }
+        });
+    });
+</script>
+
+@stack('js')
 
 </body>
 

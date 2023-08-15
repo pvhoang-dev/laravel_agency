@@ -36,4 +36,26 @@ private string $table;
 
         return $columns;
     }
+
+    public function testAPI()
+    {
+        function authShop($partnerId, $partnerKey) {
+            global $host;
+            $path = "/api/v2/shop/auth_partner";
+            $redirectUrl = "https://www.baidu.com/";
+
+            $timest = time();
+            $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
+            $sign = hash_hmac('sha256', $baseString, $partnerKey);
+            $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s&redirect=%s", $host, $path, $partnerId, $timest, $sign, $redirectUrl);
+            return $url;
+        }
+
+        $host="https://partner.shopeemobile.com";
+
+        $partnerId = 847892;
+        $partnerKey = "57615053704d6470644f554a78656d50484143644964436a5568777544524579";
+
+        echo authShop($partnerId, $partnerKey);
+    }
 }

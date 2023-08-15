@@ -9,9 +9,21 @@ class HomePageController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('languages')
+        $posts = Post::query()
+            ->with([
+                'languages',
+                'company' => function ($q) {
+                    return $q->select([
+                        'id',
+                        'name',
+                        'logo',
+                    ]);
+                }
+            ])
             ->latest()
             ->paginate();
+
+//        dd($posts->toArray());
 
         return view('applicant.index', [
             'posts' => $posts,

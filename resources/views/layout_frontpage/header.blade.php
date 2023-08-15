@@ -1,4 +1,4 @@
-<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url(&quot;../assets/img/examples/ecommerce-tips2.jpg&quot;); transform: translate3d(0px, 0px, 0px);">
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('{{ asset('/images/examples/card-project1.jpg') }}'); transform: translate3d(0px, 0px, 0px);">
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
