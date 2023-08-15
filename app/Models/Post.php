@@ -33,9 +33,9 @@ class Post extends Model
         'slug',
     ];
 
-//    protected $appends = [
-//        'currency_salary_code',
-//    ];
+    //    protected $appends = [
+    //        'currency_salary_code',
+    //    ];
 
     protected static function booted(): void
     {
@@ -67,5 +67,16 @@ class Post extends Model
     public function getStatusNameAttribute(): string
     {
         return PostStatusEnum::getKey($this->status);
+    }
+    
+    public function languages()
+    {
+        return $this->morphToMany(
+            Language::class,
+            'object',
+            ObjectLanguage::class,
+            'object_id',
+            'language_id',
+        );
     }
 }
