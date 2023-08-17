@@ -20,7 +20,7 @@ class File extends Model
     protected static function booted(): void
     {
         static::creating(static function ($object) {
-            $object->user_id = 1;
+            $object->user_id = user()->id;
         });
     }
 }

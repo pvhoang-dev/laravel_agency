@@ -28,62 +28,60 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function register()
-    {
 
-        return view('auth.register');
-    }
-
-    public function callback($provider)
+    public function callback($provider): RedirectResponse
     {
         $data = Socialite::driver($provider)->user();
 
-        $user = User::query()
+        $user       = User::query()
             ->where('email', $data->getEmail())
             ->first();
+        $checkExist = true;
 
         if (is_null($user)) {
-            $user = new User();
+            $user        = new User();
             $user->email = $data->getEmail();
-            $checkExits = true;
+            $checkExist  = false;
         }
 
-        $user->name = $data->getName();
+        $user->name   = $data->getName();
         $user->avatar = $data->getAvatar();
-        $user->role = UserRoleEnum::ADMIN;
+        $user->role   = UserRoleEnum::ADMIN;
         $user->save();
 
-        $role = strtolower(UserRoleEnum::getKeys($user->role)[0]);
+        $role = getRoleByKey($user->role);
+        Auth::login($user, true);
 
-        Auth::guard('admin')->login($user, true);
-
-        dd($role, auth()->guard('admin')->check());
-
-        if ($checkExits) {
+        if ($checkExist) {
             return redirect()->route("$role.welcome");
         }
+
         return redirect()->route('register');
     }
 
-    public function registering(RegisteringRequest $request)
-    {
-        $password = Hash::make($request->password);
-
-        $role = $request->role;
-
-        if (auth()->check()) {
-            User::where('id', auth()->user()->id)
-                ->update([
-                    'password' => $password,
-                ]);
-        } else {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $password,
-            ]);
-
-            Auth::login($user);
-        }
-    }
+    //    public function registering(RegisteringRequest $request)
+    //    {
+    //        $password = Hash::make($request->password);
+    //
+    //        $role = $request->role;
+    //
+    //        if (auth()->check()) {
+    //            User::where('id', auth()->user()->id)
+    //                ->update([
+    //                    'password' => $password,
+    //                ]);
+    //        } else {
+    //            $user = User::create([
+    //                'name' => $request->name,
+    //                'email' => $request->email,
+    //                'password' => $password,
+    //            ]);
+    //
+    //            Auth::login($user);
+    //        }
+    //    }
+    //    public function register()
+    //    {
+    //        return view('auth.register');
+    //    }
 }

@@ -27,15 +27,9 @@ private string $table;
 
     public function test()
     {
-        $columns = array();
-        foreach(DB::select("SHOW COLUMNS FROM posts") as $column)
-        {
-            //print_r($column);
-            $columns[] = $column->Field;
-        }
-
-        return $columns;
+        session()->flush();
     }
+
 
     public function testAPI()
     {

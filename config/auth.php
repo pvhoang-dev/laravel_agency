@@ -34,32 +34,19 @@ return [
     | Supported: "session"
     |
     */
-
+    
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        'admin' => [
-            'driver' => 'session',
+        'api' => [
+            'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
         ],
     ],
-
-//    'guards' => [
-//        'web' => [
-//            'driver' => 'session',
-//            'provider' => 'users',
-//        ],
-//
-//        'api' => [
-//            'driver' => 'token',
-//            'provider' => 'users',
-//            'hash' => false,
-//        ],
-//    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -79,7 +66,7 @@ return [
     */
 
     'providers' => [
-        'admin' => [
+        'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],

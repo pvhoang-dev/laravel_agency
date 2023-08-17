@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Enums\FileTypeEnum;
+use App\Enums\PostRemotableEnum;
 use App\Enums\PostStatusEnum;
 use App\Models\Company;
 use App\Models\File;
@@ -17,45 +18,57 @@ class PostImport implements ToArray, WithHeadingRow
     {
         foreach ($array as $each) {
             try {
+                $remotable   = PostRemotableEnum::OFFICE_ONLY;
                 $companyName = $each['cong_ty'];
-                $language = $each['ngon_ngu'];
-                $city = $each['dia_diem'];
+                $language    = $each['ngon_ngu'];
+                $city        = $each['dia_diem'];
+                if ($city === 'Nhiều') {
+                    $city = null;
+                } elseif ($city === 'Remote') {
+                    $remotable = PostRemotableEnum::REMOTE_ONLY;
+                    $city      = null;
+                } else {
+                    $city = str_replace([
+                        'HN',
+                        'HCM',
+                    ], [
+                        'Hà Nội',
+                        'Hồ Chí Minh',
+                    ], $city);
+                }
                 $link = $each['link'];
 
                 if (!empty($companyName)) {
-                    $companyId = Company::query()
-                        ->firstOrCreate([
-                            'name' => $companyName,
-                        ], [
-                            'city' => $city,
-                            'country' => 'Vietnam',
-                        ])->id;
+                    $companyId = Company::firstOrCreate([
+                        'name' => $companyName,
+                    ], [
+                        'country' => 'Vietnam',
+                    ])->id;
                 } else {
                     $companyId = null;
                 }
 
-                $post = Post::query()
-                    ->create([
-                        'job_title' => $language,
-                        'company_id' => $companyId,
-                        'city' => $city,
-                        'status' => PostStatusEnum::ADMIN_APPROVED,
-                    ]);
+
+                $post = Post::create([
+                    'job_title'  => $language,
+                    'company_id' => $companyId,
+                    'city'       => $city,
+                    'status'     => PostStatusEnum::ADMIN_APPROVED,
+                    'remotable'  => $remotable,
+                ]);
 
                 $languages = explode(',', $language);
                 foreach ($languages as $language) {
-                    Language::query()
-                        ->firstOrCreate([
-                            'name' => trim($language),
-                        ]);
+                    Language::firstOrCreate([
+                        'name' => trim($language),
+                    ]);
                 }
 
-                File::query()
-                    ->create([
-                        'post_id' => $post->id,
-                        'link' => $link,
-                        'type' => FileTypeEnum::JD,
-                    ]);
+                File::create([
+                    'post_id' => $post->id,
+                    'link'    => $link,
+                    'type'    => FileTypeEnum::JD,
+                ]);
             } catch (\Throwable $e) {
                 dd($each, $e);
             }
