@@ -91,14 +91,15 @@ private string $table;
                 $arr['can_parttime'] = 1;
             }
 
-            $post      = Post::create($arr);
+            $post = Post::create($arr);
             $languages = $request->get('languages');
 
             foreach ($languages as $language) {
+                $language = Language::firstOrCreate(['name' => $language]);
                 ObjectLanguage::create([
-                    'language_id' => $language,
-                    'object_id'   => $post->id,
-                    'type'        => ObjectLanguageTypeEnum::POST,
+                    'object_id' => $post->id,
+                    'language_id' => $language->id,
+                    'object_type' => Post::class,
                 ]);
             }
 
@@ -106,7 +107,7 @@ private string $table;
             return $this->successResponse();
         } catch (Throwable $e) {
             DB::rollBack();
-            return $this->errorResponse();
+            return $this->errorResponse($e->getMessage());
         }
     }
 

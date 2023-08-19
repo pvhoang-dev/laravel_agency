@@ -4,6 +4,4 @@ php artisan make:request
 // select all column name from a table
 return DB::getSchemaBuilder()->getColumnListing($table);
 
-
-test
-test
+getAndCachePostCities
