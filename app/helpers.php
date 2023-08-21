@@ -28,8 +28,9 @@ if (!function_exists('getAndCachePostCities')) {
             function () {
                 $cities  = Post::query()
                     ->pluck('city');
-//                dd($cities);
+
                 $arrCity = [];
+
                 foreach ($cities as $city) {
                     if (empty($city)) {
                         continue;

@@ -87,11 +87,13 @@ private string $table;
                     $arr['remotable'] = PostRemotableEnum::OFFICE_ONLY;
                 }
             }
+
             if ($request->has('can_parttime')) {
                 $arr['can_parttime'] = 1;
             }
 
             $post = Post::create($arr);
+
             $languages = $request->get('languages');
 
             foreach ($languages as $language) {
