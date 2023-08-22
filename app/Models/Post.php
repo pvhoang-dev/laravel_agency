@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use NumberFormatter;
 
 class Post extends Model
 {
@@ -22,41 +23,36 @@ class Post extends Model
         'job_title',
         'city',
         'status',
-        'district',
-        'remotable',
-        'can_parttime',
-        'min_salary',
-        'max_salary',
-        'currency_salary',
-        'requirement',
-        'start_date',
-        'end_date',
-        'number_applicants',
-        'status',
-        'is_pinned',
-        'slug',
+        "district",
+        "remotable",
+        "can_parttime",
+        "min_salary",
+        "max_salary",
+        "currency_salary",
+        "requirement",
+        "start_date",
+        "end_date",
+        "number_applicants",
+        "status",
+        "is_pinned",
+        "slug",
     ];
-
-    //    protected $appends = [
-    //        'currency_salary_code',
-    //    ];
+    // protected $appends = [
+    //     'currency_salary_code',
+    // ];
 
     protected static function booted(): void
     {
         static::creating(static function ($object) {
             $object->user_id = user()->id;
-            $object->status = 1;
+            $object->status  = 1;
         });
-
         static::saved(static function ($object) {
-            $city = $object->city;
-
-            $arr = explode(', ', $city);
-
+            $city    = $object->city;
+            $arr     = explode(', ', $city);
             $arrCity = getAndCachePostCities();
-
-            foreach ($arr as $item){
-                if (in_array($item, $arrCity)){
+            foreach ($arr as $item) {
+                if (in_array($item, $arrCity)) {
                     continue;
                 }
                 $arrCity[] = $item;
@@ -66,11 +62,6 @@ class Post extends Model
         });
     }
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
     public function sluggable(): array
     {
         return [
@@ -78,6 +69,22 @@ class Post extends Model
                 'source' => 'job_title'
             ]
         ];
+    }
+
+    public function languages(): MorphToMany
+    {
+        return $this->morphToMany(
+            Language::class,
+            'object',
+            ObjectLanguage::class,
+            'object_id',
+            'language_id',
+        );
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function getCurrencySalaryCodeAttribute(): string
@@ -92,25 +99,70 @@ class Post extends Model
 
     public function getLocationAttribute(): ?string
     {
-        if(!empty($this->district)){
+        if (!empty($this->district)) {
             return $this->district . ' - ' . $this->city;
         }
 
         return $this->city;
     }
-    public function languages() : morphToMany
-    {
-        return $this->morphToMany(
-            Language::class,
-            'object',
-            ObjectLanguage::class,
-            'object_id',
-            'language_id'
-        );
-    }
 
-    public function company() : belongsTo
+    public function getSalaryAttribute(): string
     {
-        return $this->belongsTo(Company::class);
+//        $val    = $this->currency_salary;
+//        $key    = PostCurrencySalaryEnum::getKey($val);
+//        $locale = PostCurrencySalaryEnum::getLocaleByVal($val);
+//        $format = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+//        $rate   = Config::getByKey($key);
+//
+//        if (!is_null($this->min_salary)) {
+//            $salary    = $this->min_salary * $rate;
+//            $minSalary = $format->formatCurrency($salary, $key);
+//        }
+//        if (!is_null($this->max_salary)) {
+//            $salary    = $this->max_salary * $rate;
+//            $maxSalary = $format->formatCurrency($salary, $key);
+//        }
+//
+//        if (!empty($minSalary) && !empty($maxSalary)) {
+//            return $minSalary . ' - ' . $maxSalary;
+//        }
+//
+//        if (!empty($minSalary)) {
+//            return __('frontpage.from_salary') . ' ' . $minSalary;
+//        }
+//
+//        if (!empty($maxSalary)) {
+//            return __('frontpage.to_salary') . ' ' . $maxSalary;
+//        }
+
+        $val    = $this->currency_salary;
+        $key    = PostCurrencySalaryEnum::getKeyByVal($val);
+        $rate   = Config::getByKey($key);
+
+        if (!is_null($this->min_salary)) {
+            $salary    = $this->min_salary * $rate;
+            $salary = number_format($salary);
+            $minSalary = $salary . $key;
+        }
+        if (!is_null($this->max_salary)) {
+            $salary    = $this->max_salary * $rate;
+            $salary = number_format($salary);
+            $maxSalary = $salary . $key;
+        }
+
+        if (!empty($minSalary) && !empty($maxSalary)) {
+            return $minSalary . ' - ' . $maxSalary;
+        }
+
+        if (!empty($minSalary)) {
+            return __('frontpage.from_salary') . ' ' . $minSalary;
+        }
+
+        if (!empty($maxSalary)) {
+            return __('frontpage.to_salary') . ' ' . $maxSalary;
+        }
+
+
+        return '';
     }
 }

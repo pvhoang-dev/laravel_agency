@@ -10,6 +10,7 @@ use App\Models\Language;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Symfony\Component\Intl\Intl;
 
 class TestController extends Controller
 {
@@ -27,29 +28,14 @@ private string $table;
 
     public function test()
     {
-        session()->flush();
+        echo Intl::getCurrencyBundle()->getCurrencySymbol('EUR');
+//        echo Currencies::getSymbol('AUD');
     }
 
 
     public function testAPI()
     {
-        function authShop($partnerId, $partnerKey) {
-            global $host;
-            $path = "/api/v2/shop/auth_partner";
-            $redirectUrl = "https://www.baidu.com/";
-
-            $timest = time();
-            $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
-            $sign = hash_hmac('sha256', $baseString, $partnerKey);
-            $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s&redirect=%s", $host, $path, $partnerId, $timest, $sign, $redirectUrl);
-            return $url;
-        }
-
-        $host="https://partner.shopeemobile.com";
-
-        $partnerId = 847892;
-        $partnerKey = "57615053704d6470644f554a78656d50484143644964436a5568777544524579";
-
-        echo authShop($partnerId, $partnerKey);
+        $numberFormatter = new \NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
+        echo ($numberFormatter);
     }
 }
