@@ -31,7 +31,7 @@ Route::get('/auth/redirect/{provider}', function ($provider) {
 
 Route::get('/auth/callback/{provider}', [AuthController::class, 'callback'])->name('auth.callback');
 
-Route::get('/', [HomePageController::class, 'index']);
+Route::get('/', [HomePageController::class, 'index'])->name('home');
 
 Route::get('/language/{locale}', function ($locale) {
     if (!in_array($locale, config('app.locales'))) {

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top navbar-color-on-scroll navbar-transparent" color-on-scroll="100"
+<nav class="navbar navbar-default navbar-fixed-top navbar-color-on-scroll" color-on-scroll="100"
     id="sectionsNav">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="presentation.html">Material Kit PRO</a>
+            <a class="navbar-brand" href="{{route('home')}}">HoangCV</a>
         </div>
 
         <div class="collapse navbar-collapse">
