@@ -5,10 +5,13 @@
 
                 <h4 class="card-title">
                     Refine
-                    <button class="btn btn-default btn-fab btn-fab-mini btn-simple pull-right" rel="tooltip" title=""
-                            data-original-title="Reset Filter">
+                    <a
+                            class="btn btn-default btn-fab btn-fab-mini btn-simple pull-right" rel="tooltip" title=""
+                            data-original-title="Reset Filter"
+                            href="{{route('applicant.index')}}"
+                    >
                         <i class="material-icons">cached</i>
-                    </button>
+                    </a>
                 </h4>
                 <div class="panel panel-default panel-rose">
                     <div class="panel-heading" role="tab" id="headingOne">
@@ -20,14 +23,14 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
                          aria-labelledby="headingOne">
-                        <input type="hidden" name="min_salary" value="{{$configs['filter_min_salary']}}" id="input-min-salary">
-                        <input type="hidden" name="max_salary" value="{{$configs['filter_max_salary']}}" id="input-max-salary">
+                        <input type="hidden" name="min_salary" value="{{ $minSalary }}" id="input-min-salary">
+                        <input type="hidden" name="max_salary" value="{{ $maxSalary }}" id="input-max-salary">
                         <div class="panel-body panel-refine">
                             <span class="pull-left">
-                                $<span id="span-min-salary">{{$configs['filter_min_salary']}}</span>
+                                $<span id="span-min-salary">{{ $minSalary }}</span>
                             </span>
                             <span class="pull-right">
-                                $<span id="span-max-salary">{{$configs['filter_max_salary']}}</span>
+                                $<span id="span-max-salary">{{ $maxSalary }}</span>
                             </span>
                             <div class="clearfix"></div>
                             <div id="sliderRefine"

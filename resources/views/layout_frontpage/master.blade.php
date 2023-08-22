@@ -70,10 +70,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        var slider2 = document.getElementById('sliderRefine');
+        const slider2 = document.getElementById('sliderRefine');
 
-        const minSalary = parseInt($('#input-min-salary').val());
-        const maxSalary = parseInt($('#input-max-salary').val());
+        const minSalary = parseInt($("#input-min-salary").val());
+        const maxSalary = parseInt($("#input-max-salary").val());
 
         noUiSlider.create(slider2, {
             start: [minSalary, maxSalary],
@@ -86,19 +86,20 @@
         });
 
         let val;
+
         slider2.noUiSlider.on('update', function (values, handle) {
             val = Math.round(values[handle]);
             if (handle) {
                 $('#span-max-salary').text(val);
-                $('#span-max-salary').val(val);
+                $('#input-max-salary').val(val);
             } else {
                 $('#span-min-salary').text(val);
-                $('#span-min-salary').val(val);
+                $('#input-min-salary').val(val);
             }
         });
     });
 </script>
-á
+
 @stack('js')
 
 </body>
