@@ -12,5 +12,4 @@ final class CompanyCountryEnum extends Enum
     public const US = 'United State';
     public const KR = 'Korea';
     public const UD = 'United Kingdom';
-
 }

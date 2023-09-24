@@ -28,14 +28,12 @@ private string $table;
 
     public function test()
     {
-        echo Intl::getCurrencyBundle()->getCurrencySymbol('EUR');
-//        echo Currencies::getSymbol('AUD');
+        
     }
 
 
     public function testAPI()
     {
-        $numberFormatter = new \NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
-        echo ($numberFormatter);
+        
     }
 }

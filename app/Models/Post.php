@@ -40,15 +40,21 @@ class Post extends Model
         "is_pinned",
         "slug",
     ];
+
     // protected $appends = [
     //     'currency_salary_code',
     // ];
+
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date'   => 'date',
+    ];
 
     protected static function booted(): void
     {
         static::creating(static function ($object) {
             $object->user_id = user()->id;
-            $object->status  = 1;
+            $object->status = PostStatusEnum::getByRole();
         });
         static::saved(static function ($object) {
             $city    = $object->city;
@@ -184,5 +190,22 @@ class Post extends Model
 
 
         return '';
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', PostStatusEnum::ADMIN_APPROVED);
+    }
+
+    public function getIsNotAvailableAttribute() : bool
+    {
+        if (empty($this->start_date)) {
+            return false;
+        }
+        if (empty($this->end_date)) {
+            return false;
+        }
+
+        return !now()->between($this->start_date, $this->end_date);
     }
 }

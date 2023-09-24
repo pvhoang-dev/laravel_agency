@@ -36,7 +36,7 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+            @endif
 
             <!-- form -->
                 <form action="{{route('registering')}}" method="post">
@@ -74,16 +74,20 @@
                                placeholder="Enter your password" name="password">
                     </div>
                     <div class="form-group">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="applicant" name="role" class="custom-control-input" value="1"
-                                   checked>
-                            <label class="custom-control-label" for="applicant"> Applicant </label>
-                        </div>
-
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="hr" name="role" class="custom-control-input">
-                            <label class="custom-control-label" for="hr"> HR </label>
-                        </div>
+                        @foreach($roles as $role => $val)
+                            <div class="custom-control custom-radio">
+                                <input
+                                        type="radio"
+                                        id="{{ $role }}"
+                                        name="role"
+                                        class="custom-control-input"
+                                        value="{{ $val }}"
+                                        checked>
+                                <label class="custom-control-label" for="{{ $role }}">
+                                    {{ __('frontpage.' . $role)}}
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-checkbox">

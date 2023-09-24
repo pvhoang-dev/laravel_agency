@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Applicant;
 
+use App\Enums\PostRemotableEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Config;
 use App\Models\Post;
@@ -13,8 +14,8 @@ class HomePageController extends Controller
     {
         $searchCities = $request->get('cities', []);
 
-        $arrCity   = getAndCachePostCities();
-        $configs   = Config::getAndCache(0);
+        $arrCity = getAndCachePostCities();
+        $configs = Config::getAndCache(0);
         $minSalary = $request->get('min_salary', $configs['filter_min_salary']);
         $maxSalary = $request->get('max_salary', $configs['filter_max_salary']);
 
@@ -29,6 +30,8 @@ class HomePageController extends Controller
                     ]);
                 }
             ])
+            ->approved()
+            ->orderByDesc('is_pinned')
             ->orderByDesc('id');
 
         if (!empty($searchCities)) {
@@ -54,10 +57,20 @@ class HomePageController extends Controller
             });
         }
 
+        $remotable = $request->get('remotable');
+
+        if (!empty($remotable)) {
+            $query->whereRemotable($remotable); // = where('remotable', $remotable);
+        }
+
         $posts = $query->paginate();
+
+        $filtersPostRemotable = PostRemotableEnum::getArrWithLowerKey();
 
         return view('applicant.index', [
             'posts' => $posts,
+            'filtersPostRemotable' => $filtersPostRemotable,
+            'remotable' => $remotable,
             'cities' => $arrCity,
             'configs' => $configs,
             'minSalary' => $minSalary,
@@ -69,11 +82,12 @@ class HomePageController extends Controller
     public function show($postId)
     {
         $post = Post::query()
-        ->with('file')
-        ->find($postId);
+            ->with('file')
+            ->approved()
+            ->findOrFail($postId);
 
         return view('applicant.show', [
-           'post' => $post,
+            'post' => $post,
         ]);
     }
 }
