@@ -72,12 +72,14 @@
                 </div>
             @endisset
 
-            <div class="row text-right">
-                <a class="btn btn-rose btn-round" href="{{ $post->file->link }}" target="_blank">
-                    Open JD&nbsp;&nbsp;
-                    <i class="fa fa-file"></i>
-                </a>
-            </div>
+            @isset($post->file)
+                <div class="row text-right">
+                    <a class="btn btn-rose btn-round" href="{{ $post->file->link }}" target="_blank">
+                        Open JD&nbsp;&nbsp;
+                        <i class="fa fa-file"></i>
+                    </a>
+                </div>
+            @endisset
         </div>
     </div>
 @endsection

@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -55,8 +55,8 @@ class StoreRequest extends FormRequest
                 'min:1',
             ],
             'remotable' => [
-                'nullable',
-                'array',
+                'required',
+                Rule::in(PostRemotableEnum::getArrWithoutAll())
             ],
             'is_parttime' => [
                 'nullable',

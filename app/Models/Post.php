@@ -114,13 +114,8 @@ class Post extends Model
     public function getRemotableNameAttribute(): string
     {
         $key = PostRemotableEnum::getKey($this->remotable);
-        $arr = explode('_', $key);
-        $str = '';
-        foreach ($arr as $each) {
-            $str .= Str::title($each) . ' ';
-        }
 
-        return $str;
+        return Str::title(str_replace('_', ' ', $key));
     }
 
     public function getLocationAttribute(): ?string
@@ -207,5 +202,49 @@ class Post extends Model
         }
 
         return !now()->between($this->start_date, $this->end_date);
+    }
+
+    public function scopeIndexHomePage($query, $filters)
+    {
+        return $query
+            ->with([
+                'languages',
+                'company' => function ($q) {
+                    $q->select([
+                        'id',
+                        'name',
+                        'logo',
+                    ]);
+                }
+            ])
+            ->approved()
+            ->when(isset($filters['cities']), function ($q) use ($filters) {
+                $q->where(function ($q) use ($filters) {
+                    foreach ($filters['cities'] as $searchCity) {
+                        $q->orWhere('city', 'like', '%' . $searchCity . '%');
+                    }
+                    $q->orWhereNull('city');
+                });
+            })
+            ->when(isset($filters['min_salary']), function ($q) use ($filters) {
+                $q->where(function ($q) use ($filters) {
+                    $q->orWhere('min_salary', '>=', $filters['min_salary']);
+                    $q->orWhereNull('min_salary');
+                });
+            })
+            ->when(isset($filters['max_salary']), function ($q) use ($filters) {
+                $q->where(function ($q) use ($filters) {
+                    $q->orWhere('max_salary', '>=', $filters['max_salary']);
+                    $q->orWhereNull('max_salary');
+                });
+            })
+            ->when(isset($filters['remotable']), function ($q) use ($filters) {
+                $q->where('remotable', $filters['remotable']);
+            })
+            ->when(isset($filters['can_parttime']), function ($q) use ($filters) {
+                $q->where('can_parttime', $filters['can_parttime']);
+            })
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('id');
     }
 }
