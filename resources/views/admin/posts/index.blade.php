@@ -6,9 +6,9 @@
             <div class="card">
                 <div class="card-header">
                     <a href="{{route('admin.posts.create')}}" class="btn btn-primary">Create</a>
-                    <label for="csv" class="btn btn-info mb-0">Import csv</label>
-                    <input type="file" name="csv" id="csv" hidden
-                           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalCSV">
+                        Import CSV
+                    </button>
                     <nav class="float-right">
                         <ul class="pagination pagination-rounded mb-0" id="pagination">
                         </ul>
@@ -36,11 +36,57 @@
             </div>
         </div>
     </div>
+
+    <div id="modalCSV" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Import CSV</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <label>Levels</label>
+                        <select class="form-control" multiple id="levels">
+                            @foreach($levels as $option => $val)
+                                <option value="{{ $val }}">
+                                    {{ ucwords(strtolower($option)) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>File</label>
+                        <input
+                                type="file"
+                                name="csv"
+                                id="csv"
+                                class="form-control"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" id="btn-import-csv">
+                            Import
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 @endsection
 
 @push('js')
     <script>
         $(document).ready(function () {
+
+            // For modal import
+            $('select').select2();
+
             // Crawl Data
             $.ajax({
                 url: '{{ route('api.posts') }}',
@@ -81,47 +127,47 @@
                         icon: 'error',
                     });
                 }
-            })
-        });
+            });
 
-        $(document).on('click', '#pagination a', function (event) {
-            event.preventDefault();
+            $(document).on('click', '#pagination a', function (event) {
+                event.preventDefault();
 
-            let page = $(this).text();
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('page', page);
-            window.location.search = urlParams;
-        });
+                let page = $(this).text();
 
-        // Import Csv
-        $("#csv").change(function (event) {
-            var formData = new FormData();
-            formData.append('csv', $(this)[0].files[0]);
-            $.ajax({
-                url: '{{route('admin.posts.import_csv')}}',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                enctype: 'multipart/form-data',
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: (function (response) {
-                    $.toast({
-                        heading: 'Import Success',
-                        text: 'Your data has been imported',
-                        showHideTransition: 'slide',
-                        position: 'bottom-right',
-                        hideAfter: 5000,
-                        icon: 'success',
-                    });
-                }),
-                error: (function (response) {
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('page', page);
+                window.location.search = urlParams;
+            });
 
-                }),
-            })
+            // Import Csv
+            $("#btn-import-csv").click(function () {
+                let formData = new FormData();
+                formData.append('file', $('#csv')[0].files[0]);
+                formData.append('levels', $('#levels').val());
+                $.ajax({
+                    url: '{{ route('admin.posts.import_csv') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                        $.toast({
+                            heading: 'Import Success',
+                            text: 'Your data have been imported',
+                            showHideTransition: 'slide',
+                            position: 'bottom-right',
+                            icon: 'success'
+                        })
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            });
         });
     </script>
 @endpush

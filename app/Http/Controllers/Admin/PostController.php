@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\PostLevelEnum;
 use App\Enums\PostRemotableEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseTrait;
@@ -38,7 +39,11 @@ private string $table;
 
     public function index()
     {
-        return view('admin.posts.index');
+        $levels = PostLevelEnum::asArray();
+
+        return view('admin.posts.index', [
+            'levels' => $levels
+        ]);
     }
 
     public function create()
@@ -96,7 +101,10 @@ private string $table;
     public function importCsv(Request $request): JsonResponse
     {
         try {
-            Excel::import(new PostImport, $request->file('csv'));
+            $levels = $request->input('levels');
+            $file = $request->file('file');
+
+            Excel::import(new PostImport($levels), $file);
 
             return $this->successResponse();
         } catch (\Throwable $e) {

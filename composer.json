@@ -10,6 +10,7 @@
         "barryvdh/laravel-translation-manager": "^0.6.5",
         "bensampo/laravel-enum": "^6.4",
         "cviebrock/eloquent-sluggable": "^10.0",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "itsgoingd/clockwork": "^5.1",
         "laravel/framework": "^10.0",
