@@ -87,7 +87,7 @@ class Post extends Model
             'object',
             ObjectLanguage::class,
             'object_id',
-            'language_id',
+            'language_id'
         );
     }
 

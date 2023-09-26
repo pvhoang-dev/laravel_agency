@@ -37,9 +37,14 @@ if (!function_exists('getAndCachePostCities')) {
                     }
                     $arr = explode(', ', $city);
                     foreach ($arr as $item) {
+                        if (empty($item)) {
+                            continue;
+                        }
+
                         if (in_array($item, $arrCity)) {
                             continue;
                         }
+
                         $arrCity[] = $item;
                     }
                 }
@@ -59,6 +64,7 @@ if (!function_exists('isSuperAdmin')) {
 if (!function_exists('isAdmin')) {
     function isAdmin() : bool
     {
-        return user() && user()->role === UserRoleEnum::ADMIN;
+//        return user() && user()->role === UserRoleEnum::ADMIN;
+        return auth()->check();
     }
 }

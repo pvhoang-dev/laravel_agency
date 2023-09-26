@@ -10,10 +10,12 @@
                             <label for="role">Role</label>
                             <div>
                                 <select class="form-control select-filter" name="role" id="role">
-                                    <option selected>All</option>
+                                    <option selected value="">All</option>
                                     @foreach($roles as $role => $value)
                                         <option value="{{$value}}"
-                                                @if((string)$value === $selectedRole) selected @endif>{{$role}}</option>
+                                                @if((string)$value === $selectedRole) selected @endif>
+                                            {{$role}}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -22,7 +24,7 @@
                             <label for="city">City</label>
                             <div>
                                 <select class="form-control select-filter" name="city" id="city">
-                                    <option selected>All</option>
+                                    <option selected value="">All</option>
                                     @foreach($cities as $city)
                                         <option value="{{$city}}"
                                                 @if((string)$city === $selectedCity) selected @endif>{{$city}}</option>
@@ -34,7 +36,7 @@
                             <label for="company">Company</label>
                             <div>
                                 <select class="form-control select-filter" name="company" id="company">
-                                    <option selected>All</option>
+                                    <option selected value="">All</option>
                                     @foreach($companies as $company)
                                         <option value="{{$company->id}}"
                                                 @if((string)$company->id === $selectedCompany) selected @endif>{{$company->name}}</option>

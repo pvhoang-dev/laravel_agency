@@ -61,7 +61,7 @@ class AuthController extends Controller
 
         if ($checkExist) {
             $role = getRoleByKey($user->role);
-            return redirect()->route("$role.welcome");
+            return redirect()->route("admin.welcome");
         }
 
         return redirect()->route('register');
@@ -91,6 +91,6 @@ class AuthController extends Controller
 
         $role = getRoleByKey($role);
 
-        return redirect()->route("$role.welcome");
+        return redirect()->route("admin.welcome");
     }
 }

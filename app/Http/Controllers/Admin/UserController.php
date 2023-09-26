@@ -29,28 +29,26 @@ private string $table;
         $selectedCity = $request->get('city');
         $selectedCompany = $request->get('company');
 
-        $query = $this
-            ->model
-            ->clone()
+        $query = $this->model->clone()
             ->with('company:id,name')
             ->latest()
         ;
 
-        if(!empty($selectedRole) && $selectedRole !== 'All'){
+        if(!is_null($selectedRole)){
             $query->where('role', $selectedRole);
         }
 
-        if(!empty($selectedCity) && $selectedCity !== 'All'){
+        if(!is_null($selectedCity)){
             $query->where('city', $selectedCity);
         }
 
-        if(!empty($selectedCompany) && $selectedCompany !== 'All'){
+        if(!is_null($selectedCompany)){
             $query->whereHas('company', function ($q) use($selectedCompany){
                 return $q->where('id', $selectedCompany);
             });
         }
 
-        $data = $query->paginate();
+        $data = $query->paginate()->appends(request()->all());
 
         $roles = UserRoleEnum::asArray();
 
@@ -62,6 +60,7 @@ private string $table;
             ->clone()
             ->distinct()
             ->limit(10)
+            ->whereNotNull('city')
             ->pluck('city');
 
         return view("admin.$this->table.index", [

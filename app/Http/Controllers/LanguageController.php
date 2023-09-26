@@ -29,7 +29,6 @@ private object $model;
             }
         });;
 
-
         return $this->successResponse($data);
     }
 }

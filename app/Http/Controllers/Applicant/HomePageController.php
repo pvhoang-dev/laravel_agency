@@ -53,6 +53,7 @@ class HomePageController extends Controller
             'minSalary' => $minSalary,
             'maxSalary' => $maxSalary,
             'searchCities' => $searchCities,
+            'searchCanParttime' => $searchCanParttime
         ]);
     }
 
@@ -63,8 +64,11 @@ class HomePageController extends Controller
             ->approved()
             ->findOrFail($postId);
 
+        $title = $post->job_title;
+
         return view('applicant.show', [
             'post' => $post,
+            'title' => $title,
         ]);
     }
 }

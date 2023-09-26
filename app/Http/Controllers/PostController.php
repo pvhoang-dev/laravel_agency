@@ -27,6 +27,7 @@ class PostController extends Controller
         $data = $this->model
             ->latest()
             ->paginate();
+
         foreach ($data as $each) {
             $each->currency_salary = $each->currency_salary_code;
             $each->status          = $each->status_name;
